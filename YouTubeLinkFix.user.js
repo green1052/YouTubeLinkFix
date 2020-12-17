@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name		YouTubeLinkFix
-// @version		1.0.0
+// @version		1.0.1
 // @author		green1052
 // @description 유튜브 추적 링크를 제거합니다.
 // @homepageURL	https://github.com/green1052/YouTubeLinkFix
@@ -12,7 +12,7 @@
 (function () {
     "use strict";
 
-    const observer = new MutationObserver(() => {
+    function RemoveTrackLink() {
         document.querySelectorAll("a.yt-simple-endpoint").forEach(query => {
             const href = query.getAttribute("href");
 
@@ -20,8 +20,14 @@
 
             const url = new URL(`https://www.youtube.com${href}`);
 
-            query.setAttribute("href", url.searchParams.get("q"));
+            query.setAttribute("href", url.searchParams.get("q"))
         });
+    }
+
+    RemoveTrackLink();
+
+    const observer = new MutationObserver(() => {
+        RemoveTrackLink();
     });
 
     observer.observe(document.body, {attributes: true, childList: true, characterData: true, subtree: true});
